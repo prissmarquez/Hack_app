@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
+import 'package:flutter_application_2/pages/Sos_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -97,6 +98,14 @@ class _HomePageState extends State<HomePage> {
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
                       onTap: () {
+                        if (tile.title == 'Ayuda') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SosScreen(),
+        ),
+      );
+    }
                       },
                       child: Container(
                         decoration: BoxDecoration(
