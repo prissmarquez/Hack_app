@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
 
@@ -146,10 +147,63 @@ class _HomePageState extends State<HomePage> {
               ),
 
               const SizedBox(height: 10)
+              
             ],
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+floatingActionButton: Column(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Container(
+      width: 180,
+      height: 180,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [
+            accent,
+            Color(0xFF9C4A2F), // tono más oscuro del terracota
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: accent.withOpacity(0.4),
+            blurRadius: 18,
+            offset: Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(100),
+          onTap: () {
+            // Aquí irá la IA
+          },
+          child: const Center(
+            child: Icon(
+              Icons.mic_rounded,
+              size: 100,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    ),
+    const SizedBox(height: 30),
+    const Text(
+      "¿Necesitas ayuda?",
+      style: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  ],
+),
     );
   }
 }
