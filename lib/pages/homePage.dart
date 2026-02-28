@@ -45,38 +45,38 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // Search
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search_rounded),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: 18,
-                          height: 1.2,
-                          color: textDark,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Buscar',
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(14),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(18),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       Icon(Icons.search_rounded),
+              //       SizedBox(width: 10),
+              //       Expanded(
+              //         child: TextField(
+              //           style: TextStyle(
+              //             fontSize: 18,
+              //             height: 1.2,
+              //             color: textDark,
+              //           ),
+              //           decoration: InputDecoration(
+              //             hintText: 'Buscar',
+              //             hintStyle: TextStyle(
+              //               fontSize: 18,
+              //             ),
+              //             border: InputBorder.none,
+              //             contentPadding: EdgeInsets.symmetric(
+              //               vertical: 10,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
               const SizedBox(height: 16),
               Expanded(
