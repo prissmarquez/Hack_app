@@ -23,7 +23,7 @@ class _CurpHelpScreenState extends State<CurpHelpScreen> {
     // YouTube: pon aquí el ID del video (solo el ID, no el link completo)
     // Ej: https://www.youtube.com/watch?v=ABC123XYZ -> ID = ABC123XYZ
     _yt = YoutubePlayerController.fromVideoId(
-      videoId: 'VIDEO_ID_AQUI',
+      videoId: 'https://www.youtube.com/watch?v=V0VNy-zStMI&t=58s',
       autoPlay: false,
       params: const YoutubePlayerParams(
         showControls: true,
