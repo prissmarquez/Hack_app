@@ -19,7 +19,6 @@ class _TramitecurpState extends State<Tramitecurp> {
   void initState() {
     super.initState();
 
-    // ✅ SOLO EL ID DEL VIDEO (no la URL completa)
     _yt = YoutubePlayerController.fromVideoId(
       videoId: 'V0VNy-zStMI',
       autoPlay: false,

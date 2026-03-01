@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/WideTile.dart';
 import 'package:flutter_application_2/models/squareTile.dart';
 import 'package:flutter_application_2/pages/Ayuda_redes.dart';
-import 'package:flutter_application_2/pages/ChatPage.dart';
 import 'package:flutter_application_2/pages/Sos_screen.dart';
 import 'package:flutter_application_2/pages/Tramites_menu.dart';
-import '../services/voice_service.dart';
+import 'package:flutter_application_2/pages/goyo_page.dart';
 
 class Homepage1 extends StatefulWidget {
   const Homepage1({super.key});
@@ -15,8 +14,6 @@ class Homepage1 extends StatefulWidget {
 }
 
 class _Homepage1State extends State<Homepage1> {
-  final VoiceService _voiceService = VoiceService();
-  String _personText = '';
   final TextEditingController _chatController = TextEditingController();
 
   // Paleta
@@ -27,43 +24,18 @@ class _Homepage1State extends State<Homepage1> {
   static const textDark = Color(0xFF3B2B22);
 
   @override
-  void initState() {
-    super.initState();
-
-    _voiceService.init(
-      onSilence: () {
-        setState(() {});
-        if (_personText.isNotEmpty) {
-          _voiceService.speak("Escuché que dijiste: $_personText");
-        }
-      },
-    );
-  }
-
-  @override
   void dispose() {
     _chatController.dispose();
     super.dispose();
   }
 
-  Future<void> _toggleMic() async {
-    if (_voiceService.isListening) {
-      await _voiceService.stopListening();
-      setState(() {});
-    } else {
-      // (Opcional) limpiar y empezar a escuchar
-      setState(() => _personText = "");
-
-      await _voiceService.startListening(
-        onTextRecognized: (texto) {
-          setState(() {
-            _personText = texto;
-          });
-        },
-      );
-
-      setState(() {});
-    }
+  void _openGoyo({String? initialMessage}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => GoyoChatScreen(initialMessage: initialMessage),
+      ),
+    );
   }
 
   void _sendChat() {
@@ -71,13 +43,8 @@ class _Homepage1State extends State<Homepage1> {
     if (text.isEmpty) return;
 
     _chatController.clear();
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ChatPage(initialUserMessage: text),
-      ),
-    );
+    FocusScope.of(context).unfocus();
+    _openGoyo(initialMessage: text);
   }
 
   @override
@@ -93,7 +60,6 @@ class _Homepage1State extends State<Homepage1> {
               children: [
                 const SizedBox(height: 16),
 
-                // 
                 Row(
                   children: [
                     Expanded(
@@ -132,7 +98,6 @@ class _Homepage1State extends State<Homepage1> {
 
                 const SizedBox(height: 14),
 
-                
                 WideTile(
                   title: "Ayuda",
                   subtitle: "Toca para abrir ayuda",
@@ -150,7 +115,7 @@ class _Homepage1State extends State<Homepage1> {
 
                 const SizedBox(height: 100),
 
-                
+                // 🎤 Micrófono → abre IA
                 Container(
                   width: 160,
                   height: 160,
@@ -173,12 +138,12 @@ class _Homepage1State extends State<Homepage1> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
-                      onTap: _toggleMic,
-                      child: Center(
+                      onTap: () => _openGoyo(),
+                      child: const Center(
                         child: Icon(
-                          _voiceService.isListening ? Icons.stop_rounded : Icons.mic_rounded,
+                          Icons.mic_rounded,
                           size: 90,
-                          color: _voiceService.isListening ? Colors.redAccent : Colors.white,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -192,7 +157,7 @@ class _Homepage1State extends State<Homepage1> {
                 ),
                 const SizedBox(height: 10),
 
-                // --- INPUT CHAT ---
+                // 💬 Chat → abre IA con mensaje
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -241,21 +206,6 @@ class _Homepage1State extends State<Homepage1> {
                     ],
                   ),
                 ),
-
-                if (_personText.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Último mensaje: $_personText",
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: textDark.withOpacity(0.7),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
 
                 const SizedBox(height: 16),
               ],
