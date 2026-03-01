@@ -13,20 +13,39 @@ class _ChatPageState extends State<ChatPage> {
   final _controller = TextEditingController();
   final _store = ChatStore.instance;
   final _scrollController = ScrollController();
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
+    // Inicializar la IA
+    _store.initAI(userName: "Don Arturo");
+
     // Si entró con un primer mensaje desde Home
     final init = widget.initialUserMessage?.trim();
     if (init != null && init.isNotEmpty) {
-      _store.addUser(init);
-      // Respuesta placeholder (aquí conectas IA después)
-      _store.addBot("Entendido. ¿En qué más te ayudo?");
+      _handleInitialMessage(init);
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  }
+
+  void _handleInitialMessage(String message) async {
+    _store.addUser(message);
+    _store.addBot("Pensando...");
+    _scrollToBottom();
+    
+    final response = await _store.sendToAI(message);
+    
+    if (mounted) {
+      setState(() {
+        // Reemplazar el mensaje de "Pensando..." con la respuesta real
+        _store.messages.removeLast();
+        _store.addBot(response ?? "Perdón, no le entendí bien.");
+      });
+      _scrollToBottom();
+    }
   }
 
   @override
@@ -45,19 +64,28 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  void _send() {
+  void _send() async {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
 
     setState(() {
       _store.addUser(text);
       _controller.clear();
-
-      // Placeholder IA:
-      _store.addBot("Dijiste: $text");
+      _isLoading = true;
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+
+    // Enviar a la IA y obtener respuesta
+    final response = await _store.sendToAI(text);
+    
+    if (mounted) {
+      setState(() {
+        _store.addBot(response ?? "Perdón, no le entendí bien.");
+        _isLoading = false;
+      });
+      _scrollToBottom();
+    }
   }
 
   @override

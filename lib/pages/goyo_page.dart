@@ -55,7 +55,7 @@ Regla de Medicinas: Si pide un recordatorio de medicina, confirma y añade al fi
   void _inicializarGoyo() {
     // ✅ Cambia el modelo a uno soportado por el SDK
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       apiKey: apiKey,
       systemInstruction: Content.system(_systemPrompt),
     );

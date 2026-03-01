@@ -49,7 +49,7 @@ class Login extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.w800,
-                                color: AppColors.shadow,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ),
@@ -63,7 +63,7 @@ class Login extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           height: 1.4,
-                          color: Color(0xFF4A4A4A),
+                          color: AppColors.textPrimary,
                         ),
                       ),
 
@@ -71,12 +71,12 @@ class Login extends StatelessWidget {
 
                       /// Campo Nombre
                       TextField(
-                        style: const TextStyle(fontSize: 20, color: AppColors.shadow),
+                        style: const TextStyle(fontSize: 20, color: AppColors.textPrimary),
                         decoration: InputDecoration(
                           labelText: "Tu nombre",
                           hintText: "Ej. Lupita",
-                          labelStyle: const TextStyle(fontSize: 18),
-                          hintStyle: const TextStyle(fontSize: 18),
+                          labelStyle: const TextStyle(fontSize: 18, color: AppColors.textPrimary),
+                          hintStyle: const TextStyle(fontSize: 18, color: AppColors.textHint),
                           prefixIcon: const Icon(Icons.person),
                           filled: true,
                           fillColor: Color(0xFFFFFAF6),
