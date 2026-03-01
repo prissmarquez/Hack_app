@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
 import 'package:flutter_application_2/pages/Sos_screen.dart';
+import 'package:flutter_application_2/pages/Tramites_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -105,7 +106,14 @@ class _HomePageState extends State<HomePage> {
           builder: (context) => const SosScreen(),
         ),
       );
-    }
+    } else if (tile.title == 'Trámites') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TramitesMenu(),
+      ),
+    );
+  }
                       },
                       child: Container(
                         decoration: BoxDecoration(
