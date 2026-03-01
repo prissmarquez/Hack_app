@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/pages/homePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmergencyContactScreen extends StatefulWidget {
@@ -27,7 +28,10 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
 
     // Cambia la ruta si tu SOS usa otro nom
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, '/sos');
+    Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(builder: (_) => const HomePage()),
+);
   }
 
   @override

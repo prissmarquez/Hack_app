@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
+import 'package:flutter_application_2/pages/Sos_screen.dart';
+import 'package:flutter_application_2/pages/Tramites_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -44,38 +46,38 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // Search
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search_rounded),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: 18,
-                          height: 1.2,
-                          color: textDark,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Buscar',
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                          ),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(14),
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(18),
+              //   ),
+              //   child: Row(
+              //     children: [
+              //       Icon(Icons.search_rounded),
+              //       SizedBox(width: 10),
+              //       Expanded(
+              //         child: TextField(
+              //           style: TextStyle(
+              //             fontSize: 18,
+              //             height: 1.2,
+              //             color: textDark,
+              //           ),
+              //           decoration: InputDecoration(
+              //             hintText: 'Buscar',
+              //             hintStyle: TextStyle(
+              //               fontSize: 18,
+              //             ),
+              //             border: InputBorder.none,
+              //             contentPadding: EdgeInsets.symmetric(
+              //               vertical: 10,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
 
               const SizedBox(height: 16),
               Expanded(
@@ -97,6 +99,21 @@ class _HomePageState extends State<HomePage> {
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
                       onTap: () {
+                        if (tile.title == 'Ayuda') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SosScreen(),
+        ),
+      );
+    } else if (tile.title == 'Trámites') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TramitesMenu(),
+      ),
+    );
+  }
                       },
                       child: Container(
                         decoration: BoxDecoration(

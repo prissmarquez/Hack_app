@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TramitesMenu extends StatefulWidget {
+  const TramitesMenu({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TramitesMenu> createState() => _TramitesMenuState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _TramitesMenuState extends State<TramitesMenu> {
   @override
   Widget build(BuildContext context) {
     // Paleta cálida suave
