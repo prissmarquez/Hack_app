@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/TrimteTile.dart';
+import 'package:flutter_application_2/pages/TramiteCurp.dart';
 
 class TramitesMenu extends StatefulWidget {
   const TramitesMenu({super.key});
@@ -11,49 +12,37 @@ class TramitesMenu extends StatefulWidget {
 class _TramitesMenuState extends State<TramitesMenu> {
   @override
   Widget build(BuildContext context) {
-    // Paleta cálida suave
-    const bg = Color(0xFFFFF7EF); // crema
-    const card = Color(0xFFFFE6D6); // durazno claro
-    const card2 = Color(0xFFFFF0D8); // beige
-    const accent = Color(0xFFB85C38); // terracota
+    const bg = Color(0xFFFFF7EF);
+    const card = Color(0xFFFFE6D6);
+    const card2 = Color(0xFFFFF0D8);
+    const accent = Color(0xFFB85C38);
     const textDark = Color(0xFF3B2B22);
 
     final items = <TramiteTile>[
-      const TramiteTile(
-        title: 'CURP',
-        icon: Icons.badge_rounded,
-        color: card,
-        routeName: '/tramites/curp',
-      ),
-      const TramiteTile(
-        title: 'Pasaporte',
-        icon: Icons.flight_takeoff_rounded,
-        color: card2,
-        routeName: '/tramites/pasaporte',
-      ),
-      const TramiteTile(
-        title: 'INE',
-        icon: Icons.perm_identity_rounded,
-        color: card2,
-        routeName: '/tramites/ine',
-      ),
-      const TramiteTile(
-        title: 'Pensión',
-        icon: Icons.volunteer_activism_rounded,
-        color: card,
-        routeName: '/tramites/pension',
-      ),
+      const TramiteTile(title: 'CURP', icon: Icons.badge_rounded, color: card, routeName: ''),
+      const TramiteTile(title: 'Pasaporte', icon: Icons.flight_takeoff_rounded, color: card2, routeName: ''),
+      const TramiteTile(title: 'INE', icon: Icons.perm_identity_rounded, color: card2, routeName: ''),
+      const TramiteTile(title: 'Pensión', icon: Icons.volunteer_activism_rounded, color: card, routeName: ''),
     ];
 
     return Scaffold(
       backgroundColor: bg,
+      appBar: AppBar(
+        backgroundColor: bg,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: textDark),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 18),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Título
               const Text(
                 'Te ayudo con tus trámites',
                 style: TextStyle(
@@ -65,39 +54,26 @@ class _TramitesMenuState extends State<TramitesMenu> {
               const SizedBox(height: 10),
               Text(
                 'Elige uno para ver el tutorial y la página oficial.',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: textDark.withOpacity(0.7),
-                ),
+                style: TextStyle(fontSize: 16, color: textDark.withOpacity(0.7)),
               ),
-
               const SizedBox(height: 16),
 
-              // Search
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
-                    const Icon(Icons.search_rounded),
-                    const SizedBox(width: 10),
+                    Icon(Icons.search_rounded),
+                    SizedBox(width: 10),
                     Expanded(
                       child: TextField(
-                        style: const TextStyle(
-                          fontSize: 18,
-                          height: 1.2,
-                          color: textDark,
-                        ),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           hintText: 'Buscar trámite (ej. CURP, INE...)',
-                          hintStyle: TextStyle(fontSize: 18),
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
-                        // (Opcional) aquí luego filtramos items
                       ),
                     ),
                   ],
@@ -118,20 +94,21 @@ class _TramitesMenuState extends State<TramitesMenu> {
                   itemCount: items.length,
                   itemBuilder: (context, index) {
                     final tile = items[index];
+
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
                       onTap: () {
-                        // Cambia a pushReplacement si no quieres "atrás"
-                        Navigator.pushNamed(context, tile.routeName);
+                        // ✅ TODOS VAN A TRAMITECURP
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) =>  Tramitecurp()),
+                        );
                       },
                       child: Container(
                         decoration: BoxDecoration(
                           color: tile.color,
                           borderRadius: BorderRadius.circular(22),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.8),
-                            width: 1.2,
-                          ),
+                          border: Border.all(color: Colors.white.withOpacity(0.8), width: 1.2),
                         ),
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -159,10 +136,7 @@ class _TramitesMenuState extends State<TramitesMenu> {
                             const SizedBox(height: 6),
                             Text(
                               'Toca para abrir',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: textDark.withOpacity(0.65),
-                              ),
+                              style: TextStyle(fontSize: 16, color: textDark.withOpacity(0.65)),
                             ),
                           ],
                         ),
@@ -171,65 +145,11 @@ class _TramitesMenuState extends State<TramitesMenu> {
                   },
                 ),
               ),
-
-              const SizedBox(height: 10),
             ],
           ),
         ),
       ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 180,
-            height: 180,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: const LinearGradient(
-                colors: [
-                  accent,
-                  Color(0xFF9C4A2F),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: accent.withOpacity(0.4),
-                  blurRadius: 18,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(100),
-                onTap: () {
-                  // Aquí irá la IA
-                },
-                child: const Center(
-                  child: Icon(
-                    Icons.mic_rounded,
-                    size: 100,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          const Text(
-            "¿Necesitas ayuda?",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
+      floatingActionButton: null,
     );
   }
 }

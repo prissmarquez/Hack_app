@@ -2,28 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-class CurpHelpScreen extends StatefulWidget {
-  const CurpHelpScreen({super.key});
+class Tramitecurp extends StatefulWidget {
+  const Tramitecurp({super.key});
 
   @override
-  State<CurpHelpScreen> createState() => _CurpHelpScreenState();
+  State<Tramitecurp> createState() => _TramitecurpState();
 }
 
-class _CurpHelpScreenState extends State<CurpHelpScreen> {
+class _TramitecurpState extends State<Tramitecurp> {
   late final YoutubePlayerController _yt;
   late final WebViewController _web;
 
-  // Página oficial para consultar/imprimir CURP
   final Uri curpUrl = Uri.parse('https://www.gob.mx/curp/');
 
   @override
   void initState() {
     super.initState();
 
-    // YouTube: pon aquí el ID del video (solo el ID, no el link completo)
-    // Ej: https://www.youtube.com/watch?v=ABC123XYZ -> ID = ABC123XYZ
+    // ✅ SOLO EL ID DEL VIDEO (no la URL completa)
     _yt = YoutubePlayerController.fromVideoId(
-      videoId: 'https://www.youtube.com/watch?v=V0VNy-zStMI&t=58s',
+      videoId: 'V0VNy-zStMI',
       autoPlay: false,
       params: const YoutubePlayerParams(
         showControls: true,
@@ -36,8 +34,8 @@ class _CurpHelpScreenState extends State<CurpHelpScreen> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onWebResourceError: (err) {
-            // opcional: mostrar snackbar
+          onWebResourceError: (error) {
+            debugPrint("Web error: ${error.description}");
           },
         ),
       )
@@ -66,14 +64,17 @@ class _CurpHelpScreenState extends State<CurpHelpScreen> {
         ),
         body: TabBarView(
           children: [
-            // TAB 1: Video YouTube
+            // TAB 1: Video
             Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   const Text(
                     'Tutorial para consultar/imprimir tu CURP',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
@@ -92,7 +93,7 @@ class _CurpHelpScreenState extends State<CurpHelpScreen> {
               ),
             ),
 
-            // TAB 2: WebView del trámite
+            // TAB 2: Página oficial
             WebViewWidget(controller: _web),
           ],
         ),
