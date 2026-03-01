@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/pages/homePage.dart';
+import 'package:flutter_application_2/pages/homePage_1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmergencyContactScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
     if (!mounted) return;
     Navigator.pushReplacement(
   context,
-  MaterialPageRoute(builder: (_) => const HomePage()),
+  MaterialPageRoute(builder: (_) => const Homepage1()),
 );
   }
 

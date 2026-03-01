@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
+import 'package:flutter_application_2/pages/Ayuda_redes.dart';
 import '../services/voice_service.dart';
 import 'package:flutter_application_2/pages/Sos_screen.dart';
 import 'package:flutter_application_2/pages/Tramites_menu.dart';
@@ -78,67 +79,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
           child: Column(
             children: [
-              // Search
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.search_rounded),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: TextField(
-                        style: TextStyle(
-                          fontSize: 18,
-                          height: 1.2,
-                          color: textDark,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: 'Buscar',
-                          hintStyle: TextStyle(fontSize: 18),
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Container(
-              //   padding: const EdgeInsets.all(14),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(18),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       Icon(Icons.search_rounded),
-              //       SizedBox(width: 10),
-              //       Expanded(
-              //         child: TextField(
-              //           style: TextStyle(
-              //             fontSize: 18,
-              //             height: 1.2,
-              //             color: textDark,
-              //           ),
-              //           decoration: InputDecoration(
-              //             hintText: 'Buscar',
-              //             hintStyle: TextStyle(
-              //               fontSize: 18,
-              //             ),
-              //             border: InputBorder.none,
-              //             contentPadding: EdgeInsets.symmetric(
-              //               vertical: 10,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+      
 
               const SizedBox(height: 16),
               Expanded(
@@ -159,7 +100,6 @@ class _HomePageState extends State<HomePage> {
                     final tile = items[index];
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
-                      onTap: () {},
                       onTap: () {
                         if (tile.title == 'Ayuda') {
       Navigator.push(
@@ -175,7 +115,14 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => TramitesMenu(),
       ),
     );
-  }
+  } else if (tile.title == 'Redes') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AyudaRedes(),
+      ),
+    );
+                      }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -279,6 +226,7 @@ class _HomePageState extends State<HomePage> {
             "¿Necesitas ayuda?",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
