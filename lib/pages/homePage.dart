@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
 import 'package:flutter_application_2/pages/Ayuda_redes.dart';
-import '../services/voice_service.dart';
 import 'package:flutter_application_2/pages/Sos_screen.dart';
 import 'package:flutter_application_2/pages/Tramites_menu.dart';
+import 'package:flutter_application_2/pages/goyo_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,51 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final VoiceService _voiceService = VoiceService();
-  String _personText = '';
-
-  @override
-  /// Inicializa el servicio de voz y se subscribe a los eventos de voz.
-  void initState() {
-    super.initState();
-
-    _voiceService.init(
-      onSilence: () {
-        setState(() {});
-
-        if (_personText.isNotEmpty) {
-          _voiceService.speak("Escuché que dijiste: $_personText");
-        }
-      },
-    );
-  }
-
-  /// Alterna entre encender y apagar el micrófono.
-  ///
-  /// Si el micrófono ya está encendido, se detiene.
-  /// Si no lo está, se inicia la escucha y se subscribe a los eventos de voz.
-  ///
-  /// Al finalizar la escucha, se reproduce la voz guardada en [_personText].
-  void _toggleMic() async {
-    if (_voiceService.isListening) {
-      await _voiceService.stopListening();
-      setState(() {});
-    } else {
-      await _voiceService.speak("");
-
-      setState(() {
-        _personText = "";
-      });
-
-      await _voiceService.startListening(
-        onTextRecognized: (texto) {
-          _personText = texto;
-        },
-      );
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Paleta cálida suave
@@ -74,13 +29,12 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
+      backgroundColor: bg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
           child: Column(
             children: [
-      
-
               const SizedBox(height: 16),
               Expanded(
                 child: GridView.builder(
@@ -91,38 +45,28 @@ class _HomePageState extends State<HomePage> {
                     crossAxisSpacing: 14,
                     childAspectRatio: 1.08,
                   ),
-                  itemCount: 4,
+                  itemCount: items.length,
                   itemBuilder: (context, index) {
-                    if (index >= items.length) {
-                      return const SizedBox.shrink();
-                    }
-
                     final tile = items[index];
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
                       onTap: () {
                         if (tile.title == 'Ayuda') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SosScreen(),
-        ),
-      );
-    } else if (tile.title == 'Trámites') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TramitesMenu(),
-      ),
-    );
-  } else if (tile.title == 'Redes') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AyudaRedes(),
-      ),
-    );
-                      }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SosScreen()),
+                          );
+                        } else if (tile.title == 'Trámites') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const TramitesMenu()),
+                          );
+                        } else if (tile.title == 'Redes') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AyudaRedes()),
+                          );
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -171,12 +115,12 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-
               const SizedBox(height: 10),
             ],
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
@@ -186,10 +130,10 @@ class _HomePageState extends State<HomePage> {
             height: 180,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   accent,
-                  Color(0xFF9C4A2F), // tono más oscuro del terracota
+                  Color(0xFF9C4A2F),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -198,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 BoxShadow(
                   color: accent.withOpacity(0.4),
                   blurRadius: 18,
-                  offset: Offset(0, 8),
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -206,16 +150,18 @@ class _HomePageState extends State<HomePage> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(100),
-                onTap: _toggleMic,
-                child: Center(
+                onTap: () {
+                  // 👇 Aquí abrimos la pantalla donde vive la IA
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const GoyoChatScreen()),
+                  );
+                },
+                child: const Center(
                   child: Icon(
-                    _voiceService.isListening
-                        ? Icons.stop_rounded
-                        : Icons.mic_rounded,
+                    Icons.mic_rounded,
                     size: 100,
-                    color: _voiceService.isListening
-                        ? Colors.redAccent
-                        : Colors.white,
+                    color: Colors.white,
                   ),
                 ),
               ),
