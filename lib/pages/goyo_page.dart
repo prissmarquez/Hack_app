@@ -5,7 +5,10 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/foundation.dart';
 
 class GoyoChatScreen extends StatefulWidget {
-  const GoyoChatScreen({super.key});
+  //
+  final String? initialMessage;
+
+  const GoyoChatScreen({super.key, this.initialMessage});
 
   @override
   State<GoyoChatScreen> createState() => _GoyoChatScreenState();
@@ -14,8 +17,8 @@ class GoyoChatScreen extends StatefulWidget {
 class _GoyoChatScreenState extends State<GoyoChatScreen> {
   final TextEditingController _controladorTexto = TextEditingController();
 
-  // ⚠️ NO subas esta key a GitHub
-  final String apiKey = 'AIzaSyAFtHoq_joq-tnrhrbsjFWDuDb8Z8KONvM';
+  // 
+  final String apiKey = 'AIzaSyBhJ5nY3dUd2NDPqPSlnpqjQaltK87ldks';
 
   late final GenerativeModel _model;
 
@@ -50,12 +53,19 @@ Regla de Medicinas: Si pide un recordatorio de medicina, confirma y añade al fi
     super.initState();
     _inicializarGoyo();
     _configurarVoz();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final msg = widget.initialMessage?.trim() ?? '';
+      if (msg.isNotEmpty) {
+        _textoEscuchado = msg; // para que se vea lo que escribió
+        _enviarAGemini(msg);
+      }
+    });
   }
 
   void _inicializarGoyo() {
-    // ✅ Cambia el modelo a uno soportado por el SDK
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       apiKey: apiKey,
       systemInstruction: Content.system(_systemPrompt),
     );
@@ -65,10 +75,7 @@ Regla de Medicinas: Si pide un recordatorio de medicina, confirma y añade al fi
     await _flutterTts.setLanguage("es-MX");
     await _flutterTts.setPitch(1);
     await _flutterTts.setSpeechRate(0.95);
-
-    if (kIsWeb) return; // en web suele variar mucho
-
-    // (Opcional) Evita setVoice raro; primero prueba sin esto.
+    if (kIsWeb) return;
   }
 
   Future<void> _escucharVoz() async {
@@ -253,47 +260,45 @@ Regla de Medicinas: Si pide un recordatorio de medicina, confirma y añade al fi
 
             const SizedBox(height: 14),
 
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 0.0, vertical: 10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _controladorTexto,
-                      decoration: InputDecoration(
-                        hintText: "Escríbele a Goyo...",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controladorTexto,
+                    decoration: InputDecoration(
+                      hintText: "Escríbele a Goyo...",
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        borderSide: BorderSide.none,
                       ),
-                      onSubmitted: (v) {
-                        _enviarAGemini(v);
-                        _controladorTexto.clear();
-                      },
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 15,
+                      ),
                     ),
+                    onSubmitted: (v) {
+                      _enviarAGemini(v);
+                      _controladorTexto.clear();
+                    },
                   ),
-                  const SizedBox(width: 10),
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.teal,
-                    child: IconButton(
-                      icon: const Icon(Icons.send, color: Colors.white),
-                      onPressed: () {
-                        final v = _controladorTexto.text;
-                        _enviarAGemini(v);
-                        _controladorTexto.clear();
-                        FocusScope.of(context).unfocus();
-                      },
-                    ),
+                ),
+                const SizedBox(width: 10),
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.teal,
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
+                    onPressed: () {
+                      final v = _controladorTexto.text;
+                      _enviarAGemini(v);
+                      _controladorTexto.clear();
+                      FocusScope.of(context).unfocus();
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
