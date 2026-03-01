@@ -77,6 +77,7 @@ Regla de Medicinas: Si pide un recordatorio de medicina, confirma y añade al fi
     await _flutterTts.setSpeechRate(0.95);
     if (kIsWeb) return;
   }
+  //ff
 
   Future<void> _escucharVoz() async {
     if (_isListening) {
