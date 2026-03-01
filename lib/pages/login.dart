@@ -1,19 +1,15 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/pages/homePage.dart';
+import 'package:flutter_application_2/pages/Emergency_contact.dart';
+import 'package:flutter_application_2/themes/paleta_colores.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const warmBg = Color(0xFFFFF3E9);
-    const cardColor = Colors.white;
-    const warmAccent = Color(0xFFE07A5F);
-    const textDark = Color(0xFF2B2B2B);
-
     return Scaffold(
-      backgroundColor: warmBg,
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -21,7 +17,7 @@ class Login extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 520),
               child: Card(
-                color: cardColor,
+                color: AppColors.surface,
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(22),
@@ -42,7 +38,7 @@ class Login extends StatelessWidget {
                             backgroundColor: Color(0xFFFFE4D6),
                             child: Icon(
                               Icons.favorite,
-                              color: warmAccent,
+                              color: AppColors.primary,
                               size: 28,
                             ),
                           ),
@@ -53,7 +49,7 @@ class Login extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.w800,
-                                color: textDark,
+                                color: AppColors.shadow,
                               ),
                             ),
                           ),
@@ -75,7 +71,7 @@ class Login extends StatelessWidget {
 
                       /// Campo Nombre
                       TextField(
-                        style: const TextStyle(fontSize: 20, color: textDark),
+                        style: const TextStyle(fontSize: 20, color: AppColors.shadow),
                         decoration: InputDecoration(
                           labelText: "Tu nombre",
                           hintText: "Ej. Lupita",
@@ -104,7 +100,7 @@ class Login extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const HomePage(),
+                                builder: (context) => const EmergencyContactScreen(),
                               ),
                             );
                           },
@@ -117,7 +113,7 @@ class Login extends StatelessWidget {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: warmAccent,
+                            backgroundColor: AppColors.primaryDark,
                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),

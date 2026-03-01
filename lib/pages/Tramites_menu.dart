@@ -1,62 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/models/HomeTile.dart';
-import '../services/voice_service.dart';
-import 'package:flutter_application_2/pages/Sos_screen.dart';
-import 'package:flutter_application_2/pages/Tramites_menu.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class TramitesMenu extends StatefulWidget {
+  const TramitesMenu({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<TramitesMenu> createState() => _TramitesMenuState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final VoiceService _voiceService = VoiceService();
-  String _personText = '';
-
-  @override
-  /// Inicializa el servicio de voz y se subscribe a los eventos de voz.
-  void initState() {
-    super.initState();
-
-    _voiceService.init(
-      onSilence: () {
-        setState(() {});
-
-        if (_personText.isNotEmpty) {
-          _voiceService.speak("Escuché que dijiste: $_personText");
-        }
-      },
-    );
-  }
-
-  /// Alterna entre encender y apagar el micrófono.
-  ///
-  /// Si el micrófono ya está encendido, se detiene.
-  /// Si no lo está, se inicia la escucha y se subscribe a los eventos de voz.
-  ///
-  /// Al finalizar la escucha, se reproduce la voz guardada en [_personText].
-  void _toggleMic() async {
-    if (_voiceService.isListening) {
-      await _voiceService.stopListening();
-      setState(() {});
-    } else {
-      await _voiceService.speak("");
-
-      setState(() {
-        _personText = "";
-      });
-
-      await _voiceService.startListening(
-        onTextRecognized: (texto) {
-          _personText = texto;
-        },
-      );
-      setState(() {});
-    }
-  }
-
+class _TramitesMenuState extends State<TramitesMenu> {
   @override
   Widget build(BuildContext context) {
     // Paleta cálida suave
@@ -66,18 +17,61 @@ class _HomePageState extends State<HomePage> {
     const accent = Color(0xFFB85C38); // terracota
     const textDark = Color(0xFF3B2B22);
 
-    final items = <HomeTile>[
-      HomeTile(title: 'Trámites', icon: Icons.assignment_rounded, color: card),
-      HomeTile(title: 'Redes', icon: Icons.wifi_rounded, color: card2),
-      HomeTile(title: 'Ayuda', icon: Icons.support_agent_rounded, color: card2),
+    final items = <_TramiteTile>[
+      const _TramiteTile(
+        title: 'CURP',
+        icon: Icons.badge_rounded,
+        color: card,
+        routeName: '/tramites/curp',
+      ),
+      const _TramiteTile(
+        title: 'Pasaporte',
+        icon: Icons.flight_takeoff_rounded,
+        color: card2,
+        routeName: '/tramites/pasaporte',
+      ),
+      const _TramiteTile(
+        title: 'INE',
+        icon: Icons.perm_identity_rounded,
+        color: card2,
+        routeName: '/tramites/ine',
+      ),
+      const _TramiteTile(
+        title: 'Pensión',
+        icon: Icons.volunteer_activism_rounded,
+        color: card,
+        routeName: '/tramites/pension',
+      ),
     ];
 
     return Scaffold(
+      backgroundColor: bg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Título
+              const Text(
+                'Te ayudo con tus trámites',
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                  color: textDark,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Elige uno para ver el tutorial y la página oficial.',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: textDark.withOpacity(0.7),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
               // Search
               Container(
                 padding: const EdgeInsets.all(14),
@@ -87,60 +81,30 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search_rounded),
-                    SizedBox(width: 10),
+                    const Icon(Icons.search_rounded),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           height: 1.2,
                           color: textDark,
                         ),
-                        decoration: InputDecoration(
-                          hintText: 'Buscar',
+                        decoration: const InputDecoration(
+                          hintText: 'Buscar trámite (ej. CURP, INE...)',
                           hintStyle: TextStyle(fontSize: 18),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(vertical: 10),
                         ),
+                        // (Opcional) aquí luego filtramos items
                       ),
                     ),
                   ],
                 ),
               ),
-              // Container(
-              //   padding: const EdgeInsets.all(14),
-              //   decoration: BoxDecoration(
-              //     color: Colors.white,
-              //     borderRadius: BorderRadius.circular(18),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       Icon(Icons.search_rounded),
-              //       SizedBox(width: 10),
-              //       Expanded(
-              //         child: TextField(
-              //           style: TextStyle(
-              //             fontSize: 18,
-              //             height: 1.2,
-              //             color: textDark,
-              //           ),
-              //           decoration: InputDecoration(
-              //             hintText: 'Buscar',
-              //             hintStyle: TextStyle(
-              //               fontSize: 18,
-              //             ),
-              //             border: InputBorder.none,
-              //             contentPadding: EdgeInsets.symmetric(
-              //               vertical: 10,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
 
               const SizedBox(height: 16),
+
               Expanded(
                 child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -150,32 +114,14 @@ class _HomePageState extends State<HomePage> {
                     crossAxisSpacing: 14,
                     childAspectRatio: 1.08,
                   ),
-                  itemCount: 4,
+                  itemCount: items.length,
                   itemBuilder: (context, index) {
-                    if (index >= items.length) {
-                      return const SizedBox.shrink();
-                    }
-
                     final tile = items[index];
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
-                      onTap: () {},
                       onTap: () {
-                        if (tile.title == 'Ayuda') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SosScreen(),
-        ),
-      );
-    } else if (tile.title == 'Trámites') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TramitesMenu(),
-      ),
-    );
-  }
+                        // Cambia a pushReplacement si no quieres "atrás"
+                        Navigator.pushNamed(context, tile.routeName);
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -230,6 +176,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
@@ -239,10 +186,10 @@ class _HomePageState extends State<HomePage> {
             height: 180,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              gradient: LinearGradient(
+              gradient: const LinearGradient(
                 colors: [
                   accent,
-                  Color(0xFF9C4A2F), // tono más oscuro del terracota
+                  Color(0xFF9C4A2F),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -251,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                 BoxShadow(
                   color: accent.withOpacity(0.4),
                   blurRadius: 18,
-                  offset: Offset(0, 8),
+                  offset: const Offset(0, 8),
                 ),
               ],
             ),
@@ -259,16 +206,14 @@ class _HomePageState extends State<HomePage> {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(100),
-                onTap: _toggleMic,
-                child: Center(
+                onTap: () {
+                  // Aquí irá la IA
+                },
+                child: const Center(
                   child: Icon(
-                    _voiceService.isListening
-                        ? Icons.stop_rounded
-                        : Icons.mic_rounded,
+                    Icons.mic_rounded,
                     size: 100,
-                    color: _voiceService.isListening
-                        ? Colors.redAccent
-                        : Colors.white,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -277,10 +222,27 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 30),
           const Text(
             "¿Necesitas ayuda?",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class _TramiteTile {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final String routeName;
+
+  const _TramiteTile({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.routeName,
+  });
 }
