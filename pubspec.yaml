@@ -32,8 +32,6 @@ dependencies:
     sdk: flutter
   google_generative_ai: ^0.4.6
   speech_to_text: ^6.6.1
-  flutter_tts: ^4.0.2
-  speech_to_text: ^6.6.0
   flutter_tts: ^4.2.5
   shared_preferences: ^2.2.3
   webview_flutter: ^4.10.0
