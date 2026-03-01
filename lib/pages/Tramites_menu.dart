@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/models/TrimteTile.dart';
 
 class TramitesMenu extends StatefulWidget {
   const TramitesMenu({super.key});
@@ -17,26 +18,26 @@ class _TramitesMenuState extends State<TramitesMenu> {
     const accent = Color(0xFFB85C38); // terracota
     const textDark = Color(0xFF3B2B22);
 
-    final items = <_TramiteTile>[
-      const _TramiteTile(
+    final items = <TramiteTile>[
+      const TramiteTile(
         title: 'CURP',
         icon: Icons.badge_rounded,
         color: card,
         routeName: '/tramites/curp',
       ),
-      const _TramiteTile(
+      const TramiteTile(
         title: 'Pasaporte',
         icon: Icons.flight_takeoff_rounded,
         color: card2,
         routeName: '/tramites/pasaporte',
       ),
-      const _TramiteTile(
+      const TramiteTile(
         title: 'INE',
         icon: Icons.perm_identity_rounded,
         color: card2,
         routeName: '/tramites/ine',
       ),
-      const _TramiteTile(
+      const TramiteTile(
         title: 'Pensión',
         icon: Icons.volunteer_activism_rounded,
         color: card,
@@ -231,18 +232,4 @@ class _TramitesMenuState extends State<TramitesMenu> {
       ),
     );
   }
-}
-
-class _TramiteTile {
-  final String title;
-  final IconData icon;
-  final Color color;
-  final String routeName;
-
-  const _TramiteTile({
-    required this.title,
-    required this.icon,
-    required this.color,
-    required this.routeName,
-  });
 }
