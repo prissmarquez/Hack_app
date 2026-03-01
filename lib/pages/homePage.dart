@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/models/HomeTile.dart';
+import '../services/voice_service.dart';
 import 'package:flutter_application_2/pages/Sos_screen.dart';
 import 'package:flutter_application_2/pages/Tramites_menu.dart';
 
@@ -12,6 +12,51 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final VoiceService _voiceService = VoiceService();
+  String _personText = '';
+
+  @override
+  /// Inicializa el servicio de voz y se subscribe a los eventos de voz.
+  void initState() {
+    super.initState();
+
+    _voiceService.init(
+      onSilence: () {
+        setState(() {});
+
+        if (_personText.isNotEmpty) {
+          _voiceService.speak("Escuché que dijiste: $_personText");
+        }
+      },
+    );
+  }
+
+  /// Alterna entre encender y apagar el micrófono.
+  ///
+  /// Si el micrófono ya está encendido, se detiene.
+  /// Si no lo está, se inicia la escucha y se subscribe a los eventos de voz.
+  ///
+  /// Al finalizar la escucha, se reproduce la voz guardada en [_personText].
+  void _toggleMic() async {
+    if (_voiceService.isListening) {
+      await _voiceService.stopListening();
+      setState(() {});
+    } else {
+      await _voiceService.speak("");
+
+      setState(() {
+        _personText = "";
+      });
+
+      await _voiceService.startListening(
+        onTextRecognized: (texto) {
+          _personText = texto;
+        },
+      );
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Paleta cálida suave
@@ -22,21 +67,9 @@ class _HomePageState extends State<HomePage> {
     const textDark = Color(0xFF3B2B22);
 
     final items = <HomeTile>[
-      HomeTile(
-        title: 'Trámites',
-        icon: Icons.assignment_rounded,
-        color: card,
-      ),
-      HomeTile(
-        title: 'Redes',
-        icon: Icons.wifi_rounded,
-        color: card2,
-      ),
-      HomeTile(
-        title: 'Ayuda',
-        icon: Icons.support_agent_rounded,
-        color: card2,
-      ),
+      HomeTile(title: 'Trámites', icon: Icons.assignment_rounded, color: card),
+      HomeTile(title: 'Redes', icon: Icons.wifi_rounded, color: card2),
+      HomeTile(title: 'Ayuda', icon: Icons.support_agent_rounded, color: card2),
     ];
 
     return Scaffold(
@@ -46,6 +79,34 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // Search
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.search_rounded),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: TextField(
+                        style: TextStyle(
+                          fontSize: 18,
+                          height: 1.2,
+                          color: textDark,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Buscar',
+                          hintStyle: TextStyle(fontSize: 18),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               // Container(
               //   padding: const EdgeInsets.all(14),
               //   decoration: BoxDecoration(
@@ -98,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                     final tile = items[index];
                     return InkWell(
                       borderRadius: BorderRadius.circular(22),
+                      onTap: () {},
                       onTap: () {
                         if (tile.title == 'Ayuda') {
       Navigator.push(
@@ -163,64 +225,62 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              const SizedBox(height: 10)
-              
+              const SizedBox(height: 10),
             ],
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-floatingActionButton: Column(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    Container(
-      width: 180,
-      height: 180,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: LinearGradient(
-          colors: [
-            accent,
-            Color(0xFF9C4A2F), // tono más oscuro del terracota
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: accent.withOpacity(0.4),
-            blurRadius: 18,
-            offset: Offset(0, 8),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 180,
+            height: 180,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  accent,
+                  Color(0xFF9C4A2F), // tono más oscuro del terracota
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: accent.withOpacity(0.4),
+                  blurRadius: 18,
+                  offset: Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(100),
+                onTap: _toggleMic,
+                child: Center(
+                  child: Icon(
+                    _voiceService.isListening
+                        ? Icons.stop_rounded
+                        : Icons.mic_rounded,
+                    size: 100,
+                    color: _voiceService.isListening
+                        ? Colors.redAccent
+                        : Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+          const Text(
+            "¿Necesitas ayuda?",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
           ),
         ],
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(100),
-          onTap: () {
-            // Aquí irá la IA
-          },
-          child: const Center(
-            child: Icon(
-              Icons.mic_rounded,
-              size: 100,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ),
-    const SizedBox(height: 30),
-    const Text(
-      "¿Necesitas ayuda?",
-      style: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-  ],
-),
     );
   }
 }

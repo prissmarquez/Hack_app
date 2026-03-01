@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  speech_to_text: ^6.6.0
+  flutter_tts: ^4.2.5
   shared_preferences: ^2.2.3
   webview_flutter: ^4.10.0
   youtube_player_iframe: ^5.2.1
